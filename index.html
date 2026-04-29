@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ darkMode: false, sidebarOpen: true }" :class="{ 'dark': darkMode }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentHub Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .transition-all { transition: all 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 font-sans transition-colors duration-300">
+
+    <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="fixed left-0 top-0 h-full bg-white dark:bg-zinc-900 border-r border-slate-200 dark:border-zinc-800 transition-all duration-300 z-50">
+        <div class="p-6 flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                <i data-lucide="bot"></i>
+            </div>
+            <span x-show="sidebarOpen" class="font-bold text-xl tracking-tight">AgentHub</span>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2">
+            <template x-for="item in [
+                { name: 'Dashboard', icon: 'layout-dashboard', id: 'dash' },
+                { name: 'Users', icon: 'users', id: 'users' },
+                { name: 'Agents', icon: 'cpu', id: 'agents' },
+                { name: 'Skills', icon: 'zap', id: 'skills' },
+                { name: 'Contracts', icon: 'file-text', id: 'contracts' },
+                { name: 'Error Log', icon: 'alert-circle', id: 'errors' }
+            ]">
+                <a href="#" class="flex items-center gap-4 p-3 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 transition-colors">
+                    <i :data-lucide="item.icon" class="w-5 h-5"></i>
+                    <span x-show="sidebarOpen" x-text="item.name" class="font-medium"></span>
+                </a>
+            </template>
+        </nav>
+    </aside>
+
+    <main :class="sidebarOpen ? 'ml-64' : 'ml-20'" class="transition-all duration-300 min-h-screen">
+        
+        <header class="h-16 bg-white dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between px-8 sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-lg">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <h1 class="text-lg font-semibold">Dashboard Overview</h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400">
+                    <i x-show="!darkMode" data-lucide="moon" class="w-5 h-5"></i>
+                    <i x-show="darkMode" data-lucide="sun" class="w-5 h-5"></i>
+                </button>
+                <div class="flex items-center gap-3 border-l pl-6 border-slate-200 dark:border-zinc-800">
+                    <div class="text-right">
+                        <p class="text-sm font-medium">Admin User</p>
+                        <p class="text-xs text-slate-500">Super Admin</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                        AD
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8">
+            
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                    <p class="text-slate-500 dark:text-zinc-400 text-sm font-medium">Monthly Revenue</p>
+                    <h3 class="text-2xl font-bold mt-1 text-emerald-600">$42,850.00</h3>
+                </div>
+                <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                    <p class="text-slate-500 dark:text-zinc-400 text-sm font-medium">Coupon Losses</p>
+                    <h3 class="text-2xl font-bold mt-1 text-rose-500">-$1,240.00</h3>
+                </div>
+                <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                    <p class="text-slate-500 dark:text-zinc-400 text-sm font-medium">Active Agents</p>
+                    <h3 class="text-2xl font-bold mt-1">1,204</h3>
+                </div>
+                <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                    <p class="text-slate-500 dark:text-zinc-400 text-sm font-medium">System Health</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <h3 class="text-2xl font-bold text-amber-500">12</h3>
+                        <span class="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded">Failing</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="bg-white dark:bg-zinc-900 p-8 rounded-xl border border-slate-200 dark:border-zinc-800 h-64 flex flex-col items-center justify-center border-dashed">
+                <i data-lucide="bar-chart-3" class="w-12 h-12 text-slate-300 mb-4"></i>
+                <p class="text-slate-400">Weekly Activity Chart Placeholder</p>
+            </div>
+
+            <section class="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 overflow-hidden">
+                <div class="p-6 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center">
+                    <h2 class="text-lg font-bold">Agent Management</h2>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">Add Agent</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50 dark:bg-zinc-800/50 text-slate-500 text-xs uppercase">
+                            <tr>
+                                <th class="px-6 py-4">Agent Name</th>
+                                <th class="px-6 py-4">Owner</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4">Skills</th>
+                                <th class="px-6 py-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-zinc-800">
+                            <tr x-data="{ expanded: false, menuOpen: false }" class="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <td class="px-6 py-4 font-medium">CustomerSupport_v4</td>
+                                <td class="px-6 py-4 text-sm">TechFlow Inc.</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button @click="expanded = !expanded" class="text-indigo-600 text-sm hover:underline">
+                                        <span x-text="expanded ? 'Hide Skills' : 'View 3 Skills'"></span>
+                                    </button>
+                                    <div x-show="expanded" x-transition class="mt-2 flex flex-wrap gap-1">
+                                        <span class="text-[10px] bg-slate-100 dark:bg-zinc-700 px-2 py-1 rounded">Web Browsing</span>
+                                        <span class="text-[10px] bg-slate-100 dark:bg-zinc-700 px-2 py-1 rounded">PDF Reader</span>
+                                        <span class="text-[10px] bg-slate-100 dark:bg-zinc-700 px-2 py-1 rounded">Zendesk</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 relative">
+                                    <button @click="menuOpen = !menuOpen" class="p-1 hover:bg-slate-200 dark:hover:bg-zinc-700 rounded">
+                                        <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                    </button>
+                                    <div x-show="menuOpen" @click.away="menuOpen = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg shadow-xl z-10 py-1">
+                                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-zinc-700">Configure</button>
+                                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-zinc-700 text-rose-500">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr x-data="{ expanded: false, menuOpen: false }" class="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <td class="px-6 py-4 font-medium">ResearchBot_Alpha</td>
+                                <td class="px-6 py-4 text-sm">BioLab Group</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-xs font-medium bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Failing
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button @click="expanded = !expanded" class="text-indigo-600 text-sm hover:underline">
+                                        <span x-text="expanded ? 'Hide Skills' : 'View 1 Skill'"></span>
+                                    </button>
+                                    <div x-show="expanded" x-transition class="mt-2 flex flex-wrap gap-1">
+                                        <span class="text-[10px] bg-slate-100 dark:bg-zinc-700 px-2 py-1 rounded">PubMed Search</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 relative">
+                                    <button @click="menuOpen = !menuOpen" class="p-1 hover:bg-slate-200 dark:hover:bg-zinc-700 rounded">
+                                        <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section x-data="{ modalOpen: false }" class="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 overflow-hidden">
+                <div class="p-6 border-b border-slate-200 dark:border-zinc-800">
+                    <h2 class="text-lg font-bold">Execution Error Log</h2>
+                </div>
+                <div class="divide-y divide-slate-100 dark:divide-zinc-800">
+                    <div class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-zinc-800/30 cursor-pointer" @click="modalOpen = true">
+                        <div class="flex items-center gap-4">
+                            <span class="text-xs text-slate-400 font-mono">14:22:01</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500 text-white uppercase">Critical</span>
+                            <div>
+                                <p class="text-sm font-semibold">API_CONNECTION_TIMEOUT</p>
+                                <p class="text-xs text-slate-500">Agent: CustomerSupport_v4 failed to reach Zendesk</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                    </div>
+                </div>
+
+                <div x-show="modalOpen" x-cloak class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div x-show="modalOpen" x-transition.opacity class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="modalOpen = false"></div>
+                    
+                    <div x-show="modalOpen" x-transition.scale class="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-2xl shadow-2xl z-10 overflow-hidden border border-slate-200 dark:border-zinc-700">
+                        <div class="p-6 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center">
+                            <h3 class="text-xl font-bold">Error Trace: API_CONNECTION_TIMEOUT</h3>
+                            <button @click="modalOpen = false" class="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-full">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="bg-slate-950 text-emerald-400 p-4 rounded-lg font-mono text-xs overflow-x-auto">
+                                <p>> Attempting connection to https://api.zendesk.com/v2/tickets</p>
+                                <p>> Warning: Socket delay detected (5000ms)</p>
+                                <p class="text-rose-400">> Error: ETIMEDOUT at Connection.connect (node:net:1157:14)</p>
+                                <p>> Stack trace: line 42, col 18 in engine.js</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-slate-500 uppercase text-[10px] font-bold">Affected Agent</p>
+                                    <p>CustomerSupport_v4</p>
+                                </div>
+                                <div>
+                                    <p class="text-slate-500 uppercase text-[10px] font-bold">Timestamp</p>
+                                    <p>April 29, 2026 - 14:22:01</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-zinc-800/50 flex justify-end gap-3">
+                            <button @click="modalOpen = false" class="px-4 py-2 text-sm font-medium border border-slate-300 dark:border-zinc-600 rounded-lg">Mark Resolved</button>
+                            <button @click="modalOpen = false" class="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
